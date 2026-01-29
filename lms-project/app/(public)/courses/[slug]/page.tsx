@@ -30,7 +30,7 @@ export default async function SlugPage({ params }: { params: { slug: string } })
                     <div className="flex flex-wrap gap-3">
                         <Badge className="flex items-center gap-1 px-3 py-1">
                             <IconChartBar className="size-4" />
-                            <span>{course.category}</span>
+                            <span>{course.level}</span>
                         </Badge>
                         <Badge className="flex items-center gap-1 px-3 py-1">
                             <IconCategory className="size-4" />
