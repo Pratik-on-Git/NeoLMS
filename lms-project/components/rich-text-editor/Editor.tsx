@@ -13,6 +13,7 @@ interface FieldValue {
     onChange?: (value: string) => void
 }
 
+
 interface RichTextEditorProps {
     content?: string
     onChange?: (content: string) => void
@@ -28,6 +29,18 @@ export default function RichTextEditor({
     placeholder = 'Start typing...',
     field
 }: RichTextEditorProps) {
+    let initialContent = content;
+    if (field) {
+        if (field.value) {
+            try {
+                initialContent = JSON.parse(field.value);
+            } catch (e) {
+                initialContent = '<p>Start typing...</p>';
+            }
+        } else {
+            initialContent = '<p>Start typing...</p>';
+        }
+    }
 
     const editor = useEditor({
         extensions: [
@@ -64,7 +77,7 @@ export default function RichTextEditor({
                 emptyEditorClass: 'is-editor-empty',
             }),
         ],
-        content: field ? (field.value ? JSON.parse(field.value) : '<p>Start typing...</p>') : content,
+        content: initialContent,
         editable: editable,
         immediatelyRender: false,
         editorProps: {
@@ -79,7 +92,6 @@ export default function RichTextEditor({
                 onChange?.(editor.getHTML())
             }
         },
-
     })
 
     return (

@@ -15,6 +15,7 @@ type UploaderProps = {
     onDrop?: (files: File[]) => void
     value?: string
     onChange?: (value: string) => void
+    fileType?: "image" | "video" | "both"
 }
 
 interface UploaderState {
@@ -26,10 +27,10 @@ interface UploaderState {
     isDeleting: boolean
     error: boolean
     objectUrl?: string
-    fileType: "image" | "video"
+    fileType: "image" | "video" | "both"
 }
 
-export function Uploader({ className, onDrop: onDropProp, value, onChange }: UploaderProps) {
+export function Uploader({ className, onDrop: onDropProp, value, onChange, fileType }: UploaderProps) {
     const fileUrl = useConstructUrl(value || "")
     
     const [fileState, setFileState] = useState<UploaderState>({
@@ -39,9 +40,9 @@ export function Uploader({ className, onDrop: onDropProp, value, onChange }: Upl
         uploading: false,
         progress: 0,
         isDeleting: false,
-        fileType: "image",
+        fileType: fileType || "image",
         key: value,
-        objectUrl: fileUrl,
+        objectUrl: value ? fileUrl : undefined,
     })
 
     const uploadFile = useCallback(async (file: File) => {
@@ -52,6 +53,8 @@ export function Uploader({ className, onDrop: onDropProp, value, onChange }: Upl
         }))
 
         try {
+            const isImage = file.type.startsWith("image")
+
             const predesignedResponse = await fetch("/api/s3/upload", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -59,7 +62,7 @@ export function Uploader({ className, onDrop: onDropProp, value, onChange }: Upl
                     fileName: file.name,
                     contentType: file.type,
                     size: file.size,
-                    isImage: true,
+                    isImage: isImage,
                 }),
             })
 
@@ -145,13 +148,14 @@ export function Uploader({ className, onDrop: onDropProp, value, onChange }: Upl
                 error: false,
                 id: uuidv4(),
                 isDeleting: false,
-                fileType: "image",
+                fileType: file.type.startsWith("image") ? "image" : file.type.startsWith("video") ? "video" : (fileType || "image"),
+                key: undefined,
             })
 
             onDropProp?.(acceptedFiles)
             uploadFile(file)
         },
-        [onDropProp, uploadFile, fileState.objectUrl],
+        [onDropProp, uploadFile, fileState.objectUrl, fileType],
     )
 
     async function handleRemoveFile() {
@@ -175,7 +179,7 @@ export function Uploader({ className, onDrop: onDropProp, value, onChange }: Upl
                 toast.error("Failed to remove file from storage.")
                 setFileState((prev) => ({
                     ...prev,
-                    isDeleting: true,
+                    isDeleting: false,
                     error: true,
                 }))
                 return
@@ -192,7 +196,7 @@ export function Uploader({ className, onDrop: onDropProp, value, onChange }: Upl
                 progress: 0,
                 objectUrl: undefined,
                 error: false,
-                fileType: "image",
+                fileType: fileType || "image",
                 id: null,
                 isDeleting: false,
             }))
@@ -244,6 +248,7 @@ export function Uploader({ className, onDrop: onDropProp, value, onChange }: Upl
                 handleRemoveFile={handleRemoveFile}
                 isDeleting={fileState.isDeleting}
                 previewUrl={fileState.objectUrl}
+                fileType={fileState.fileType === "both" ? undefined : fileState.fileType}
             />)
         }
 
@@ -260,12 +265,12 @@ export function Uploader({ className, onDrop: onDropProp, value, onChange }: Upl
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
-        accept: {
-            "image/*": [],
-        },
+        accept: (
+            fileType === "video" ? { "video/*": [] } : fileType === "both" ? { "image/*": [], "video/*": [] } : { "image/*": [] }
+        ),
         maxFiles: 1,
         multiple: false,
-        maxSize: 5 * 1024 * 1024, // 5 MB
+        maxSize: fileType === "video" ? 50 * 1024 * 1024 : 5 * 1024 * 1024, // 50 MB for video, 5 MB for image
         onDropRejected: rejectedFiles,
         disabled: fileState.uploading || !!fileState.objectUrl,
     })
