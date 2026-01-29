@@ -3,6 +3,9 @@
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Heading from "@tiptap/extension-heading";
+import BulletList from "@tiptap/extension-bullet-list";
+import OrderedList from "@tiptap/extension-ordered-list";
+import ListItem from "@tiptap/extension-list-item";
 import { TextStyle } from "@tiptap/extension-text-style";
 import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
@@ -45,8 +48,16 @@ export default function RichTextEditor({
 
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({ heading: false }),
+      StarterKit.configure({
+        heading: false, // We'll add Heading explicitly
+        bulletList: false, // We'll add BulletList explicitly
+        orderedList: false, // We'll add OrderedList explicitly
+        listItem: false, // We'll add ListItem explicitly
+      }),
       Heading.configure({ levels: [1, 2, 3] }),
+      BulletList,
+      OrderedList,
+      ListItem,
       TextStyle,
       TextAlign.configure({
         types: ["heading", "paragraph"],

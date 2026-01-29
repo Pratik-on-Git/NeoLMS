@@ -1,5 +1,5 @@
+
 import z from "zod";
-import { de, th } from "zod/v4/locales";
 
 
 export const courseLevels = ["Beginner", "Intermediate", "Advanced"] as const;
@@ -79,4 +79,14 @@ export function mapFormToPrisma(data: CourseFormData) {
         level: levelMap[data.level],
         status: statusMap[data.status],
     };
+}
+
+// Utility to map DB enum to display value
+export function getLevelDisplay(level: string): string {
+    switch (level) {
+        case "BEGINNER": return "Beginner";
+        case "INTERMEDIATE": return "Intermediate";
+        case "ADVANCED": return "Advanced";
+        default: return level;
+    }
 }

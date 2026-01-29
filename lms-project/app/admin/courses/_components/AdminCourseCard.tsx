@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { AdminCourseType } from "@/app/data/admin/admin-get-courses";
+import { getLevelDisplay } from "@/lib/zodSchemas";
 import { useConstructUrl } from "@/hooks/use-construct";
 import Link from "next/link";
 import { ArrowRight, Eye, MoreVertical, Pencil, School2, TimerIcon, Trash2 } from "lucide-react";
@@ -78,7 +79,7 @@ export function AdminCourseCard({ data }: iAppProps) {
                     </div>
                     <div className="flex items-center gap-x-2">
                         <School2 className="size-6 p-1 rounded-md text-primary bg-primary/10" />
-                        <p className="text-sm text-muted-foreground">{data.level}</p>
+                        <p className="text-sm text-muted-foreground">{getLevelDisplay(data.level)}</p>
                     </div>
                 </div>
                 <Link

@@ -35,11 +35,7 @@ export function Menubar({ editor }: MenubarProps) {
   const setHeading = useCallback(
     (level: 1 | 2 | 3) => {
       if (!editor) return;
-      if (editor.isActive("heading", { level })) {
-        editor.chain().focus().setParagraph().run();
-      } else {
-        editor.chain().focus().setHeading({ level }).run();
-      }
+      editor.chain().focus().toggleHeading({ level }).run();
     },
     [editor]
   );

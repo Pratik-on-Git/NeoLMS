@@ -1,5 +1,6 @@
 import { PublicCourseType } from "@/app/data/course/get-all-courses";
 import { Badge } from "@/components/ui/badge";
+import { getLevelDisplay } from "@/lib/zodSchemas";
 import { Card, CardContent } from "@/components/ui/card";
 import { School2Icon, TimerIcon } from "lucide-react";
 import Image from "next/image";
@@ -21,7 +22,7 @@ export function PublicCourseCard({ data }: iAppProps) {
     const thumbnailUrl = useConstructUrl(data.fileKey);
     return (
         <Card className={cardClassName}>
-            <Badge className={badgeClassName}>{data.level}</Badge>
+            <Badge className={badgeClassName}>{getLevelDisplay(data.level)}</Badge>
             <Image
                 width={600}
                 height={400}
