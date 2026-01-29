@@ -7,6 +7,7 @@ import { ArrowRight, Eye, MoreVertical, Pencil, School2, TimerIcon, Trash2 } fro
 import { Button, buttonVariants } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface iAppProps {
     data: AdminCourseType;
@@ -15,8 +16,8 @@ interface iAppProps {
 export function AdminCourseCard({ data }: iAppProps) {
     const thumbnailUrl = useConstructUrl(data.fileKey);
     return (
-        <Card className="group relative overflow-hidden py-0 gap-0">
-            <div className="relative w-full aspect-video bg-muted">
+        <Card className="group relative py-0 gap-0">
+            <div className="relative w-full rounded-t-lg h-[250px] bg-muted overflow-hidden">
                 <div className="absolute top-2 right-2 z-10">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -52,7 +53,7 @@ export function AdminCourseCard({ data }: iAppProps) {
                         src={thumbnailUrl}
                         alt={data.title ?? "Course Image"}
                         fill
-                        className="object-cover"
+                        className="object-cover w-full h-full"
                         sizes="(min-width: 1024px) 600px, 100vw"
                         priority
                     />
@@ -83,7 +84,7 @@ export function AdminCourseCard({ data }: iAppProps) {
                 <Link
                     href={`/admin/courses/${data.id}/edit`}
                     className={buttonVariants({
-                        className: "w-full mt-4 justify-center",
+                        className: "w-full mt-4 justify-center h-10",
                     })}
                 >
                     Edit Course <ArrowRight className="size-4" />
@@ -91,4 +92,35 @@ export function AdminCourseCard({ data }: iAppProps) {
             </CardContent>
         </Card>
     );
+}
+
+
+export function AdminCourseCardSkeleton() {
+    return (
+        <Card className="group relative py-0 gap-0 animate-pulse">
+            <div className="absolute top-2 right-2 z-10 flex items-center gap-2">
+                <Skeleton className="h-6 w-16 rounded-full" />
+                <Skeleton className="size-8 rounded-md" />
+            </div>
+            <div className="w-full relative h-fit">
+                <Skeleton className="w-full relative h-fit"/>
+                <Skeleton className="w-full rounded-t-lg aspect-video h-[250px] object-cover"/>
+            </div>
+            <CardContent className="p-4">
+                <Skeleton className="h-6 w-3/4 mb-2 rounded" />
+                <Skeleton className="h-4 w-full mb-4 rounded" />
+                <div className="mt-4 flex items-center gap-x-5">
+                    <div className="flex items-center gap-x-2">
+                        <Skeleton className="size-6 rounded-md" />
+                        <Skeleton className="h-4 w-10 rounded" />
+                    </div>
+                    <div className="flex items-center gap-x-2">
+                        <Skeleton className="size-6 rounded-md" />
+                        <Skeleton className="h-4 w-10 rounded" />
+                    </div>
+                </div>
+                <Skeleton className="mt-4 h-10 w-full rounded"/>
+            </CardContent>
+        </Card>
+    )
 }
