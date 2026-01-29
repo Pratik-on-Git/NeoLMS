@@ -2,7 +2,7 @@
 import { ApiResponse } from "@/lib/types";
 import { courseSchema, mapFormToPrisma } from "@/lib/zodSchemas";
 import { prisma } from "@/lib/db";
-import arcjet, { detectBot, fixedWindow, request } from "@arcjet/next"
+import arcjet, { fixedWindow, request } from "@arcjet/next"
 import { requireAdmin } from "@/app/data/admin/require-admin"
 import { env } from "@/lib/env";
 
@@ -10,11 +10,7 @@ const aj = arcjet({
     key: env.ARCJET_KEY || "",
     characteristics: ["fingerprint"],
     rules: [
-        detectBot({
-            mode: "LIVE",
-            allow: ["CATEGORY:SEARCH_ENGINE", "CATEGORY:PREVIEW", "CATEGORY:MONITOR"],
-        }),
-        fixedWindow({
+      fixedWindow({
             mode: "LIVE",
             window: "1m",
             max: 10,

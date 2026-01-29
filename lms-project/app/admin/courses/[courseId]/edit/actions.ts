@@ -13,7 +13,7 @@ import {
   LessonSchemaType,
 } from "@/lib/zodSchemas";
 import { adminGetCourse } from "@/app/data/admin/admin-get-course";
-import arcjet, { detectBot, fixedWindow, request } from "@arcjet/next";
+import arcjet, { fixedWindow, request } from "@arcjet/next";
 import { env } from "@/lib/env";
 import { revalidatePath } from "next/cache";
 
@@ -21,10 +21,6 @@ const aj = arcjet({
   key: env.ARCJET_KEY || "",
   characteristics: ["fingerprint"],
   rules: [
-    detectBot({
-      mode: "LIVE",
-      allow: ["CATEGORY:SEARCH_ENGINE", "CATEGORY:PREVIEW", "CATEGORY:MONITOR"],
-    }),
     fixedWindow({
       mode: "LIVE",
       window: "1m",

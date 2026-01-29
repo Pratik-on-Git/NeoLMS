@@ -2,17 +2,13 @@ import { env } from "@/lib/env";
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { S3 } from "@/lib/S3Client";
 import { NextResponse } from "next/server";
-import arcjet, { detectBot, fixedWindow } from "@arcjet/next";
+import arcjet, { fixedWindow } from "@arcjet/next";
 import { requireAdmin } from "@/app/data/admin/require-admin";
 
 const aj = arcjet({
   key: env.ARCJET_KEY || "",
   characteristics: ["fingerprint"],
   rules: [
-    detectBot({
-      mode: "LIVE",
-      allow: ["CATEGORY:SEARCH_ENGINE", "CATEGORY:PREVIEW", "CATEGORY:MONITOR"],
-    }),
     fixedWindow({
       mode: "LIVE",
       window: "1m",

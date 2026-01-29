@@ -1,7 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionCookie } from "better-auth/cookies";
+import arcjet, {createMiddleware, detectBot} from "@arcjet/next";
+import { env } from './lib/env';
 
-export async function middleware(request: NextRequest) {
+const aj = arcjet({
+  key: env.ARCJET_KEY || "",
+  rules: [
+    detectBot({
+      mode: "LIVE", 
+      allow: ["CATEGORY:SEARCH_ENGINE", "CATEGORY:PREVIEW", "CATEGORY:MONITOR"],
+    }),
+  ],
+});
+
+async function authMiddleware(request: NextRequest) {
   const sessionCookie = getSessionCookie(request);
 
   if (!sessionCookie) {
@@ -11,6 +23,15 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-export const config = {
-  matcher: ["/admin/:path*"], // Specify the routes the middleware applies to
+export const config ={
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|api/auth).*)"],
 };
+
+export default createMiddleware(aj, async (request: NextRequest) => {
+  if (request.nextUrl.pathname.startsWith("/admin")) {
+    return authMiddleware(request);
+  }
+
+  return NextResponse.next();
+  
+});
