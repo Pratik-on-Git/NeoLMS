@@ -11,6 +11,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Book, CheckIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { enrollInCourseAction } from "./actions";
 
 type Params = Promise<{ slug: string }>;
 export default async function SlugPage({ params }: { params: { slug: string } }) {
@@ -205,7 +206,12 @@ export default async function SlugPage({ params }: { params: { slug: string } })
                                     </li>
                                 </ul>
                             </div>
-                            <Button className="w-full cursor-pointer">Enroll Now</Button>
+                            <form action={async () => {
+                                "use server";
+                                await enrollInCourseAction(course.id);
+                            }}>
+                                <Button className="w-full cursor-pointer">Enroll Now</Button>
+                            </form>
                             <p className="mt-3 text-center text-xs text-muted-foreground ">
                                 15 days money back guarantee
                             </p>

@@ -21,11 +21,13 @@ model User {
 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-
+  stripeCustomerId String? @unique
   courses       Course[]
   enrollment    Enrollment[]
   accounts      Account[]
   sessions      Session[]
+
+  
 
   @@map("user")
 }
@@ -138,7 +140,7 @@ model Lesson {
 
 model Enrollment {
   id        String   @id @default(uuid())
-
+  status    EnrollmentStatus @default(Pending)
   ammount   Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -146,4 +148,11 @@ model Enrollment {
   courseId  String
   User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
+  @@unique([courseId, userId])
+}
+
+enum EnrollmentStatus {
+  Pending
+  Completed
+  Cancelled
 }
