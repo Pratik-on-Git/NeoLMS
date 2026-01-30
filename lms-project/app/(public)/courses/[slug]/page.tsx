@@ -10,7 +10,7 @@ import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { CollapsibleTrigger } from "@/components/ui/collapsible";
 import { CheckIcon, Play } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { checkIfCourseBought } from "@/app/data/user/user-is-enrolled";
 import Link from "next/link";
 import { EnrollmentButton } from "./_components/EnrollmentButton";
@@ -210,7 +210,7 @@ export default async function SlugPage({ params }: { params: { slug: string } })
                                 </ul>
                             </div>
                             {isEnrolled ? (
-                                <Link className="w-full cursor-pointer" href={`/dashboard`}>
+                                <Link className={buttonVariants({className: "w-full cursor-pointer"})} href={`/dashboard`}>
                                     <Play className="mr-2 size-4" /> Go To Course
                                 </Link>
                             ) : (
