@@ -13,7 +13,7 @@ export default function NotAdminRoute() {
                     </div>
                     <CardTitle className="text-2xl">Access Denied</CardTitle>
                     <CardDescription className="max-w-xs mx-auto">
-                        You do not have the necessary permissions to access this page.
+                        You Do Not Have The Necessary Permissions To Access This Page.
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -21,7 +21,7 @@ export default function NotAdminRoute() {
                         className: "w-full",
                     })}>
                         <ArrowLeft className="mr-1 size-4"/>
-                        Go Back to Home
+                        Go Back To Home
                     </Link>
                 </CardContent>
             </Card>

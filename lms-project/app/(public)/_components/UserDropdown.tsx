@@ -56,7 +56,7 @@ const { handleSignOut } = useSignOut();
                     <DropdownMenuItem asChild>
                         <Link href="/">
                             <HomeIcon size={16} className="opacity-60" aria-hidden="true" />
-                                <span>Home</span>
+                                    <span>Home</span>
                         </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
@@ -75,7 +75,7 @@ const { handleSignOut } = useSignOut();
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleSignOut}>
                     <LogOutIcon size={16} className="opacity-60" aria-hidden="true" />
-                        <span>Sign out</span>
+                        <span>Sign Out</span>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

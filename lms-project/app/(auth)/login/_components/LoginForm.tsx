@@ -92,7 +92,7 @@ export function LoginForm() {
         <Card>
             <CardHeader>
                 <CardTitle className="text-xl">Welcome Back!</CardTitle>
-                <CardDescription className="text-sm">Please Log In to Your Account</CardDescription>
+                <CardDescription className="text-sm">Please Log In To Your Account</CardDescription>
             </CardHeader>
 
             <CardContent className="flex flex-col gap-4">
@@ -150,7 +150,7 @@ export function LoginForm() {
                                 {passwordPending ? (
                                     <>
                                         <Loader2 className="size-4 animate-spin" />
-                                        <span>Logging in...</span>
+                                        <span>Logging In...</span>
                                     </>
                                 ) : (
                                     <span>Log In</span>
@@ -182,16 +182,16 @@ export function LoginForm() {
                                 </>
                             ) : (<>
                                 <Send className="size-4" />
-                                <span>Continue with Email</span>
+                                <span>Continue With Email</span>
                             </>)}
                         </Button>
                     </TabsContent>
                 </Tabs>
 
                 <p className="mt-4 text-center text-sm text-muted-foreground">
-                    Don&apos;t have an account?{" "}
+                    Don&apos;t Have An Account?{" "}
                     <Link href="/signup" className="text-primary hover:underline">
-                        Sign up
+                        Sign Up
                     </Link>
                 </p>
             </CardContent>

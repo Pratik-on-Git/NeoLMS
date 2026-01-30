@@ -9,14 +9,17 @@ import { IconBook, IconCategory, IconCategory2, IconChartBar, IconChevronDown, I
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Book, CheckIcon } from "lucide-react";
+import { CheckIcon, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { enrollInCourseAction } from "./actions";
+import { checkIfCourseBought } from "@/app/data/user/user-is-enrolled";
+import Link from "next/link";
+import { EnrollmentButton } from "./_components/EnrollmentButton";
 
 type Params = Promise<{ slug: string }>;
 export default async function SlugPage({ params }: { params: { slug: string } }) {
     const { slug } = await params;
     const course = await getIndividualCourse(slug);
+    const isEnrolled = await checkIfCourseBought(course.id);
 
     return (
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3 mt-5">
@@ -62,8 +65,8 @@ export default async function SlugPage({ params }: { params: { slug: string } })
                             Course Content
                         </h2>
                         <div>
-                            {course.chapter.length} chapters | {" "}
-                            {course.chapter.reduce((total, chapter) => total + chapter.lessons.length, 0) || 0} Lessons
+                            {course.chapter.length} Chapters | {" "}
+                                {course.chapter.reduce((total, chapter) => total + chapter.lessons.length, 0) || 0} Lessons
                         </div>
                     </div>
                     <div className="space-y-4">
@@ -145,7 +148,7 @@ export default async function SlugPage({ params }: { params: { slug: string } })
                                         </div>
                                         <div>
                                             <p className="text-sm font-medium">Duration</p>
-                                            <p className="text-sm text-muted-foreground">{course.duration} Hours of Content</p>
+                                            <p className="text-sm text-muted-foreground">{course.duration} Hours Of Content</p>
                                         </div>
                                     </div>
                                 </div>
@@ -192,11 +195,11 @@ export default async function SlugPage({ params }: { params: { slug: string } })
                                         </div>
                                         <span>Full Lifetime Access</span>
                                     </li>
-                                    <li className="flex items-center gap-2 text-sm">
+                                        <li className="flex items-center gap-2 text-sm">
                                         <div className="rounded-full bg-green-500/10 p-1 text-green-500">
                                             <CheckIcon className="size-3" />
                                         </div>
-                                        <span>Access on Mobile & Desktop</span>
+                                        <span>Access On Mobile & Desktop</span>
                                     </li>
                                     <li className="flex items-center gap-2 text-sm">
                                         <div className="rounded-full bg-green-500/10 p-1 text-green-500">
@@ -206,20 +209,20 @@ export default async function SlugPage({ params }: { params: { slug: string } })
                                     </li>
                                 </ul>
                             </div>
-                            <form action={async () => {
-                                "use server";
-                                await enrollInCourseAction(course.id);
-                            }}>
-                                <Button className="w-full cursor-pointer">Enroll Now</Button>
-                            </form>
+                            {isEnrolled ? (
+                                <Link className="w-full cursor-pointer" href={`/dashboard`}>
+                                    <Play className="mr-2 size-4" /> Go To Course
+                                </Link>
+                            ) : (
+                            <EnrollmentButton courseId={course.id} />
+                            )}
                             <p className="mt-3 text-center text-xs text-muted-foreground ">
-                                15 days money back guarantee
+                                15 Days Money Back Guarantee
                             </p>
                         </CardContent>
                     </Card>
                 </div>
             </div>
-
         </div>
     )
 }

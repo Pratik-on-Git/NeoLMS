@@ -23,11 +23,11 @@ export function PublicCourseCard({ data }: iAppProps) {
     return (
         <Card className={cardClassName}>
             <Badge className={badgeClassName}>{getLevelDisplay(data.level)}</Badge>
-            <Image
+                <Image
                 width={600}
                 height={400}
                 src={thumbnailUrl}
-                alt="Thumbnail Image of Course"
+                alt="Thumbnail Image Of Course"
                 className={imageClassName}
             />
             <CardContent className={cardContentClassName}>

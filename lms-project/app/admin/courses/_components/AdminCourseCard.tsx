@@ -60,7 +60,7 @@ export function AdminCourseCard({ data }: iAppProps) {
                     />
                 ) : (
                     <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
-                        No image
+                        No Image
                     </div>
                 )}
             </div>
@@ -75,7 +75,7 @@ export function AdminCourseCard({ data }: iAppProps) {
                 <div className="mt-4 flex items-center gap-x-5">
                     <div className="flex items-center gap-x-2">
                         <TimerIcon className="size-6 p-1 rounded-md text-primary bg-primary/10" />
-                        <p className="text-sm text-muted-foreground">{data.duration}hrs.</p>
+                        <p className="text-sm text-muted-foreground">{data.duration} Hrs.</p>
                     </div>
                     <div className="flex items-center gap-x-2">
                         <School2 className="size-6 p-1 rounded-md text-primary bg-primary/10" />

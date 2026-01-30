@@ -82,9 +82,9 @@ export function SignUpForm() {
 
     return (
         <Card>
-            <CardHeader>
-                <CardTitle className="text-xl">Create an Account</CardTitle>
-                <CardDescription>Sign up to get started with NeoLMS</CardDescription>
+                <CardHeader>
+                <CardTitle className="text-xl">Create An Account</CardTitle>
+                <CardDescription>Sign Up To Get Started With NeoLMS</CardDescription>
             </CardHeader>
 
             <CardContent>
@@ -146,7 +146,7 @@ export function SignUpForm() {
                             minLength={8}
                         />
                         <p className="text-xs text-muted-foreground">
-                            Password must be at least 8 characters long
+                            Password Must Be At Least 8 Characters Long
                         </p>
                     </div>
 
@@ -162,9 +162,9 @@ export function SignUpForm() {
                     </Button>
 
                     <p className="text-center text-sm text-muted-foreground">
-                        Already have an account?{" "}
+                        Already Have An Account?{" "}
                         <Link href="/login" className="text-primary hover:underline">
-                            Log in
+                            Log In
                         </Link>
                     </p>
                 </form>

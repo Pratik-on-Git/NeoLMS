@@ -37,7 +37,7 @@ export default function VerifyRequest() {
         <Card className="w-full mx-auto max-w-sm">
             <CardHeader className="text-center">
                 <CardTitle className="text-xl">Check Your Email</CardTitle>
-                <CardDescription>We have sent a login link to your email address. Please check your inbox and click on the link to proceed.</CardDescription>
+                <CardDescription>We Have Sent A Login Link To Your Email Address. Please Check Your Inbox And Click On The Link To Proceed.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
                 <div className="flex flex-col items-center space-y-2">
@@ -55,11 +55,11 @@ export default function VerifyRequest() {
                             <InputOTPSlot index={5} />
                         </InputOTPGroup>
                     </InputOTP>
-                    <p className="text-sm text-muted-foreground">Please enter the 6-digit code sent to your email.</p>
+                    <p className="text-sm text-muted-foreground">Please Enter The 6-Digit Code Sent To Your Email.</p>
                 </div>
 
                 <Button className="w-full" onClick={verifyOtp} disabled={emailPending || !isOtpComplete}>
-                    {emailPending ? (<>
+                        {emailPending ? (<>
                         <Loader2 className="size-4 animate-spin" />
                         <span>Verifying...</span>
                     </>) : (

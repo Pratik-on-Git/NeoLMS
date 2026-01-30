@@ -33,7 +33,7 @@ async function RenderCourses() {
                 <div className="w-full flex">
                     <EmptyState 
                         title="No Courses Found"
-                        description="Please Add A New Course to Get Started."
+                        description="Please Add A New Course To Get Started."
                         buttonText="Add New Course"
                         href="/admin/courses/create"
                     />
