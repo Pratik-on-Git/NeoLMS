@@ -54,9 +54,9 @@ export async function enrollInCourseAction(courseId: string): Promise<ApiRespons
         const result  = await prisma.$transaction(async (tx) => {
             const existingEnrollment = await tx.enrollment.findUnique({
                 where: {
-                    userId_courseId: {
+                    courseId_userId: {
+                        courseId: course.id,
                         userId: user.id,
-                        courseId: courseId,
                     },
                 },
             });
