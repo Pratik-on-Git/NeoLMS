@@ -3,6 +3,7 @@ import { ChartAreaInteractive } from "@/components/sidebar/chart-area-interactiv
 import { SectionCards } from "@/components/sidebar/section-cards";
 import { adminGetEnrollmentStats } from "../data/admin/admin-get-enrollment-stats";
 import { adminGetDashboardStats } from "../data/admin/admin-get-dashboard-stats";
+import { adminGetAllLessons } from "../data/admin/admin-get-all-lessons";
 import { RevenueLessonAreaInteractive } from "@/components/sidebar/revenue-lesson-area-interactive";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
@@ -13,7 +14,8 @@ import { Suspense } from "react";
 
 export default async function AdminIndexPage() {
   const enrollmentData = await adminGetEnrollmentStats();
-  const { totalCourses } = await adminGetDashboardStats();
+  const { totalCourses, totalLessons } = await adminGetDashboardStats();
+  const allLessons = await adminGetAllLessons();
   const totalRevenue = totalCourses * 50;
 
   return (
@@ -30,7 +32,8 @@ export default async function AdminIndexPage() {
           <RenderRecentCourses />
         </Suspense>
       </div>
-      <RevenueLessonAreaInteractive data={enrollmentData} totalRevenue={totalRevenue} />
+      {/* Pass real lesson data for monthly lessons chart */}
+      <RevenueLessonAreaInteractive data={allLessons.map(l => ({ date: l.date, enrollments: 1, revenue: 0 }))} totalRevenue={totalRevenue} />
     </>
   )
 }
