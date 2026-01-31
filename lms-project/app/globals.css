@@ -87,6 +87,8 @@
   --sidebar-accent-foreground: oklch(0.6960 0.1700 162.4800);
   --sidebar-border: oklch(0.9200 0.0200 162);
   --sidebar-ring: oklch(0.6960 0.1700 162.4800);
+  --color-desktop: var(--chart-1);
+  --color-mobile: var(--chart-2);
   --font-sans: Hanken Grotesk, ui-sans-serif, sans-serif, system-ui;
   --font-serif: Georgia, serif;
   --font-mono: JetBrains Mono, monospace;
@@ -142,6 +144,8 @@
   --sidebar-accent-foreground: oklch(0.6960 0.1700 162.4800);
   --sidebar-border: oklch(0.2000 0.0300 162);
   --sidebar-ring: oklch(0.6960 0.1700 162.4800);
+  --color-desktop: var(--chart-1);
+  --color-mobile: var(--chart-2);
   --font-sans: Hanken Grotesk, ui-sans-serif, sans-serif, system-ui;
   --font-serif: Georgia, serif;
   --font-mono: JetBrains Mono, monospace;

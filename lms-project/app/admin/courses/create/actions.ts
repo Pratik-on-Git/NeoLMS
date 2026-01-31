@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import arcjet, { fixedWindow, request } from "@arcjet/next"
 import { requireAdmin } from "@/app/data/admin/require-admin"
 import { env } from "@/lib/env";
+import { stripe } from "@/lib/stripe";
 
 const aj = arcjet({
     key: env.ARCJET_KEY || "",
@@ -50,6 +51,15 @@ export async function CreateCourse(values: unknown): Promise<ApiResponse> {
       };
     }
 
+    const data = await stripe.products.create({
+      name: validation.data.title,
+      description: validation.data.smallDescription,
+      default_price_data: {
+        currency: "usd",
+        unit_amount: validation.data.price * 100,
+      },
+    })
+
     // Map UI values to Prisma enum values
     const prismaData = mapFormToPrisma(validation.data);
 
@@ -57,6 +67,7 @@ export async function CreateCourse(values: unknown): Promise<ApiResponse> {
       data: {
         ...prismaData,
         userId: session?.user.id as string,
+        stripePriceId: data.default_price as string,
       },
     });
 

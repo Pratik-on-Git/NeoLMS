@@ -1,5 +1,5 @@
+import "server-only";
 import { prisma } from "@/lib/db";
-import { CourseLevel } from "@prisma/client";
 
 export async function getAllCourses() {
     await new Promise((resolve) => setTimeout(resolve, 2000));

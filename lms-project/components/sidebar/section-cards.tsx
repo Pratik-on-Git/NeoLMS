@@ -1,41 +1,32 @@
-import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react"
-
-import { Badge } from "@/components/ui/badge"
+import { IconBook2, IconCashBanknote, IconShoppingCart, IconUsers} from "@tabler/icons-react"
 import {
   Card,
-  CardAction,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { adminGetDashboardStats } from "@/app/data/admin/admin-get-dashboard-stats"
 
-export function SectionCards() {
+export async function SectionCards() {
+  const { totalSignups, totalCustomers, totalCourses, totalLessons } = await adminGetDashboardStats()
   return (
-    <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
+    <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
       <Card className="@container/card">
-        <CardHeader>
-          <CardDescription>Total Revenue</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            $1,250.00
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <div>
+          <CardDescription className="text-lg">Total Signups</CardDescription>
+          <CardTitle className="text-4xl font-semibold tabular-nums @[250px]/card:text-3xl">
+            {totalSignups}
           </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-              <IconTrendingUp />
-              +12.5%
-            </Badge>
-          </CardAction>
+          </div>
+          <IconUsers className="size-6 text-muted-foreground" />
         </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Trending up this month <IconTrendingUp className="size-4" />
-          </div>
-          <div className="text-muted-foreground">
-            Visitors for the last 6 months
-          </div>
+        <CardFooter className="flex-col items-start gap-1 text-sm">
+          <p className="text-muted-foreground">Registered Users on the Platform</p>
         </CardFooter>
       </Card>
-      <Card className="@container/card">
+      { /* <Card className="@container/card">
         <CardHeader>
           <CardDescription>New Customers</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
@@ -95,6 +86,48 @@ export function SectionCards() {
             Steady performance increase <IconTrendingUp className="size-4" />
           </div>
           <div className="text-muted-foreground">Meets growth projections</div>
+        </CardFooter>
+      </Card> */}
+      <Card className="@container/card">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <div>
+            <CardDescription className="text-lg">Total Customers</CardDescription>
+            <CardTitle className="text-4xl font-semibold tabular-nums @[250px]/card:text-3xl">
+              {totalCustomers}
+            </CardTitle>
+          </div>
+          <IconShoppingCart className="size-6 text-muted-foreground" />
+        </CardHeader>
+        <CardFooter className="flex-col items-start gap-1 text-sm">
+          <p className="text-muted-foreground">Students Who Enrolled Here</p>
+        </CardFooter>
+      </Card>
+      <Card className="@container/card">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <div>
+            <CardDescription className="text-lg">Total Revenue</CardDescription>
+            <CardTitle className="text-4xl font-semibold tabular-nums @[250px]/card:text-3xl">
+              {`$${(totalCourses * 50).toFixed(2)}`}
+            </CardTitle>
+          </div>
+          <IconCashBanknote className="size-6 text-muted-foreground" />
+        </CardHeader>
+        <CardFooter className="flex-col items-start gap-1 text-sm">
+          <p className="text-muted-foreground">Total Revenue Generated Here</p>
+        </CardFooter>
+      </Card>
+      <Card className="@container/card">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <div>
+            <CardDescription className="text-lg">Total Lessons</CardDescription>
+            <CardTitle className="text-4xl font-semibold tabular-nums @[250px]/card:text-3xl">
+              {totalLessons}
+            </CardTitle>
+          </div>
+          <IconBook2 className="size-6 text-muted-foreground" />
+        </CardHeader>
+        <CardFooter className="flex-col items-start gap-1 text-sm">
+          <p className="text-muted-foreground">Total Learning Content Available</p>
         </CardFooter>
       </Card>
     </div>
