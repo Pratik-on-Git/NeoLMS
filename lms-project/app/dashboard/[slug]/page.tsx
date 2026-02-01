@@ -14,8 +14,8 @@ export default async function CourseSlugRoute({ params }: iAppProps) {
     
     // Find the first lesson in the first chapter
     const firstChapter = course.course.chapter[0];
-    if (firstChapter && firstChapter.lessons.length > 0) {
-        const firstLesson = firstChapter.lessons[0];
+    const firstLesson = firstChapter.lessons[0];
+    if (firstLesson) {
         redirect(`/dashboard/${slug}/${firstLesson.id}`);
     }
     
