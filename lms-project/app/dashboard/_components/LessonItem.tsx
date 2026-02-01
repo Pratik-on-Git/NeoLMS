@@ -1,3 +1,4 @@
+
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -10,11 +11,12 @@ interface iAppProps {
         description: string | null;
     };
     slug: string;
+    isActive?: boolean;
 }
 
 
-export function LessonItem({ lesson, slug }: iAppProps) {
-    const completed = true;
+export function LessonItem({ lesson, slug, isActive }: iAppProps) {
+    const completed = false;
     return (
         <Link
             href={`/dashboard/${slug}/${lesson.id}`}
@@ -22,7 +24,8 @@ export function LessonItem({ lesson, slug }: iAppProps) {
                 variant: completed ? "secondary" : "outline",
                 className: cn(
                     "w-full p-2.5 h-auto justify-start transition-all",
-                    completed && "bg-green-100 dark:bg-green-900/30 border-green-300 dark:border-green-700 hover:bg-green-200 dark:hover:bg-green-900/50 text-green-800 dark:text-green-200"
+                    completed && "bg-green-100 dark:bg-green-900/30 border-green-300 dark:border-green-700 hover:bg-green-200 dark:hover:bg-green-900/50 text-green-800 dark:text-green-200",
+                    isActive && !completed && "bg-primary/10 dark:bg-primary/20 border border-primary/50 hover:bg-primary/20 dark:hover:bg-primary/30 text-primary",
                 ),
             })}
         >
@@ -34,15 +37,18 @@ export function LessonItem({ lesson, slug }: iAppProps) {
                         </div>
                     ) : (
                         <div className={cn(
-                            "size-5 rounded-full border-2 bg-background flex justify-center items-center",
+                            "size-5 rounded-full border-2 bg-background flex justify-center items-center", isActive ? "border-primary bg-primary/10 dark:bg-primary/20" : "border-muted-foreground/60"
                         )}>
-                            <Play className={cn("size-2.5 fill-current")} />
+                            <Play className={cn("size-2.5 fill-current", isActive ? "text-primary" : "text-muted-foreground")} />
                         </div>
                     )}
                 </div>
                 <div className="flex-1 text-left min-w-0">
-                    <p className={cn("text-sm font-medium text-foreground truncate", completed && "text-green-800 dark:text-green-200")}>{lesson.position}: {lesson.title}</p>
+                    <p className={cn("text-sm font-medium text-foreground truncate", completed ? "text-green-800 dark:text-green-200" : isActive ? "text-primary font-semibold" : "text-foreground")}>{lesson.position}: {lesson.title}</p>
                     {completed && (<p className="text-[10px] text-green-700 dark:text-green-300 font-medium mt-1">Completed</p>
+                    )}
+
+                    {isActive && !completed && (<p className="text-[10px] text-primary font-medium mt-1">Currently Watching</p>
                     )}
                 </div>
             </div>

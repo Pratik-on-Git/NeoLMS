@@ -7,7 +7,7 @@ interface iAppProps {
     children: ReactNode;
 }
 
-export default  async function CourseLayout({ params, children }: iAppProps) {
+export default async function CourseLayout({ params, children }: iAppProps) {
     const {slug} = await params;
 
     const course = await getCoursesSidebarData(slug);

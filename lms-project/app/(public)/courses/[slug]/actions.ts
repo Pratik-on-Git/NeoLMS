@@ -18,12 +18,54 @@ const aj = arcjet.withRule(
   }),
 );
 
+/**
+ * Validates or creates a Stripe customer for the user.
+ * If existing customer ID is invalid (deleted from Stripe), creates a new one.
+ */
+async function getOrCreateStripeCustomer(
+  userId: string,
+  email: string,
+  name: string,
+  existingCustomerId: string | null
+): Promise<string> {
+  // If user has an existing customer ID, validate it exists in Stripe
+  if (existingCustomerId) {
+    try {
+      const customer = await stripe.customers.retrieve(existingCustomerId);
+      // Check if customer is deleted
+      if (!customer.deleted) {
+        return existingCustomerId;
+      }
+    } catch {
+      // Customer doesn't exist in Stripe, will create new one
+      console.log(`Stripe customer ${existingCustomerId} not found, creating new one`);
+    }
+  }
+
+  // Create new customer in Stripe
+  const customer = await stripe.customers.create({
+    email: email,
+    name: name,
+    metadata: { userId: userId },
+  });
+
+  // Update user with new Stripe customer ID
+  await prisma.user.update({
+    where: { id: userId },
+    data: { stripeCustomerId: customer.id },
+  });
+
+  return customer.id;
+}
+
 export async function enrollInCourseAction(
   courseId: string,
 ): Promise<ApiResponse | never> {
   const user = await requireUser();
   let checkoutUrl: string;
+
   try {
+    // Rate limiting
     const req = await request();
     const decision = await aj.protect(req, {
       fingerprint: user.id,
@@ -35,6 +77,8 @@ export async function enrollInCourseAction(
         message: "Too many requests. Please try again later.",
       };
     }
+
+    // Fetch course details
     const course = await prisma.course.findUnique({
       where: { id: courseId },
       select: {
@@ -42,6 +86,8 @@ export async function enrollInCourseAction(
         title: true,
         price: true,
         slug: true,
+        stripePriceId: true,
+        status: true,
       },
     });
 
@@ -51,104 +97,118 @@ export async function enrollInCourseAction(
         message: "Course not found.",
       };
     }
-    let stripeCustomerId: string;
 
+    if (course.status !== "PUBLISHED") {
+      return {
+        status: "error",
+        message: "This course is not available for enrollment.",
+      };
+    }
+
+    if (!course.stripePriceId) {
+      return {
+        status: "error",
+        message: "This course is not configured for payment.",
+      };
+    }
+
+    // Check if user is already enrolled and completed
+    const existingEnrollment = await prisma.enrollment.findUnique({
+      where: {
+        courseId_userId: {
+          courseId: courseId,
+          userId: user.id,
+        },
+      },
+      select: { status: true, id: true },
+    });
+
+    if (existingEnrollment?.status === EnrollmentStatus.Completed) {
+      return {
+        status: "success",
+        message: "You are already enrolled in this course.",
+      };
+    }
+
+    // Get or create Stripe customer (validates existing ID)
     const userWithStripeCustomerId = await prisma.user.findUnique({
       where: { id: user.id },
       select: { stripeCustomerId: true },
     });
 
-    if (userWithStripeCustomerId?.stripeCustomerId) {
-      stripeCustomerId = userWithStripeCustomerId.stripeCustomerId;
-    } else {
-      const customer = await stripe.customers.create({
-        email: user.email,
-        name: user.name,
-        metadata: { userId: user.id },
-      });
+    const stripeCustomerId = await getOrCreateStripeCustomer(
+      user.id,
+      user.email,
+      user.name,
+      userWithStripeCustomerId?.stripeCustomerId ?? null
+    );
 
-      stripeCustomerId = customer.id;
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { stripeCustomerId: stripeCustomerId },
+    // Create or update enrollment record
+    let enrollment;
+    if (existingEnrollment) {
+      enrollment = await prisma.enrollment.update({
+        where: { id: existingEnrollment.id },
+        data: {
+          ammount: course.price,
+          status: EnrollmentStatus.Pending,
+          updatedAt: new Date(),
+        },
+      });
+    } else {
+      enrollment = await prisma.enrollment.create({
+        data: {
+          courseId: course.id,
+          userId: user.id,
+          ammount: course.price,
+          status: EnrollmentStatus.Pending,
+        },
       });
     }
 
-    const result = await prisma.$transaction(async (tx) => {
-      const existingEnrollment = await tx.enrollment.findUnique({
-        where: {
-          courseId_userId: {
-            courseId: courseId,
-            userId: user.id,
-          },
+    // Create Stripe checkout session (outside transaction)
+    const checkoutSession = await stripe.checkout.sessions.create({
+      customer: stripeCustomerId,
+      line_items: [
+        {
+          price: course.stripePriceId,
+          quantity: 1,
         },
-        select: { status: true, id: true },
-      });
-      // Assuming EnrollmentStatus is an enum imported from your models/types
-
-      if (existingEnrollment?.status === EnrollmentStatus.Completed) {
-        return {
-          status: "success",
-          message: "You are already enrolled in this course.",
-        };
-      }
-
-      let enrollment;
-
-      if (existingEnrollment) {
-        enrollment = await tx.enrollment.update({
-          where: {
-            id: existingEnrollment.id,
-          },
-          data: {
-            ammount: course.price,
-            status: EnrollmentStatus.Pending,
-            updatedAt: new Date(),
-          },
-        });
-      } else {
-        enrollment = await tx.enrollment.create({
-          data: {
-            courseId: course.id,
-            userId: user.id,
-            ammount: course.price,
-            status: EnrollmentStatus.Pending,
-          },
-        });
-      }
-
-      const checkoutSession = await stripe.checkout.sessions.create({
-        customer: stripeCustomerId,
-        line_items: [
-          {
-            price: "price_1SvJzUPGSAxW38h9zQUGUMBC",
-            quantity: 1,
-          },
-        ],
-        mode: "payment",
-        success_url: `${env.BETTER_AUTH_URL}/payment/success`,
-        cancel_url: `${env.BETTER_AUTH_URL}/payment/cancel`,
-        metadata: {
-          userId: user.id,
-          courseId: course.id,
-          enrollmentId: enrollment.id,
-        },
-      });
-
-      return {
-        enrollment: enrollment,
-        checkoutUrl: checkoutSession.url,
-      };
+      ],
+      mode: "payment",
+      success_url: `${env.BETTER_AUTH_URL}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${env.BETTER_AUTH_URL}/payment/cancel`,
+      metadata: {
+        userId: user.id,
+        courseId: course.id,
+        enrollmentId: enrollment.id,
+      },
+      // Expire session after 30 minutes
+      expires_at: Math.floor(Date.now() / 1000) + 30 * 60,
     });
 
-    checkoutUrl = result.checkoutUrl as string;
+    if (!checkoutSession.url) {
+      // Rollback enrollment to cancelled if checkout creation fails
+      await prisma.enrollment.update({
+        where: { id: enrollment.id },
+        data: { status: EnrollmentStatus.Cancelled },
+      });
+      return {
+        status: "error",
+        message: "Failed to create checkout session. Please try again.",
+      };
+    }
+
+    checkoutUrl = checkoutSession.url;
   } catch (error: unknown) {
+    console.error("Enrollment error:", error);
+
     if (error instanceof Stripe.errors.StripeError) {
       return {
         status: "error",
         message: "Payment processing error: " + error.message,
       };
     }
+
     if (typeof error === "object" && error !== null && "message" in error) {
       return {
         status: "error",
@@ -157,6 +217,7 @@ export async function enrollInCourseAction(
           "Failed to enroll in course.",
       };
     }
+
     return {
       status: "error",
       message: "Failed to enroll in course.",
