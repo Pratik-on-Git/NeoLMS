@@ -13,6 +13,34 @@ Learning Management System built with Next.js 16 (App Router), Prisma, Better Au
 - Email SMTP provider (for OTP emails)
 - GitHub OAuth App (for social login)
 
+## Features
+
+Based on the codebase, NeoLMS includes the following features:
+
+- Authentication with email/password, email OTP, and GitHub OAuth
+- Role-based access (admin vs user) and protected admin area
+- Course browsing, enrollment, and progress tracking
+- Stripe checkout payments with webhook handling
+- S3-compatible file uploads (presigned URLs)
+- Rich text editor for course content
+- Email delivery for OTP and notifications via SMTP
+- Bot/rate protection with Arcjet
+- Responsive dashboard layout and reusable UI components
+
+## Tools & Tech Stack (Used in this project)
+
+- Next.js 16 (App Router)
+- TypeScript
+- Prisma + PostgreSQL
+- Better Auth (email/password, OTP, GitHub OAuth, admin plugin)
+- Stripe (payments + webhooks)
+- Arcjet (security/rate protection)
+- S3-compatible storage (AWS S3/Tigris/R2) with presigned uploads
+- Nodemailer (SMTP email)
+- Shadcn UI + Radix UI components
+- Tailwind CSS
+- PNPM
+
 ## Quick Start (Local)
 
 1. Install dependencies
