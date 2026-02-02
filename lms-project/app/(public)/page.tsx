@@ -58,13 +58,36 @@ export default function Home() {
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 mt-8">
-                            <Link className={buttonVariants({
-                                size: "lg",
-                            })} href="/courses">Explore Courses</Link>
-                            <Link className={buttonVariants({
-                                size: "lg",
-                                variant: "outline",
-                            })} href="/login">Sign In</Link>
+                            <Link
+                                className={buttonVariants({
+                                    size: "lg",
+                                })}
+                                href="/courses"
+                            >
+                                Explore Courses
+                            </Link>
+                            {session ? (
+                                <Link
+                                    className={buttonVariants({
+                                        size: "lg",
+                                        variant: "outline",
+                                    })}
+                                    href="/dashboard"
+                                >
+                                    Go to Dashboard
+                                </Link>
+                            ) : (
+                                <button
+                                    type="button"
+                                    className={buttonVariants({
+                                        size: "lg",
+                                        variant: "outline",
+                                    })}
+                                    onClick={handleLogin}
+                                >
+                                    Sign In
+                                </button>
+                            )}
                         </div>
                     </div>
                     </MotionMain>

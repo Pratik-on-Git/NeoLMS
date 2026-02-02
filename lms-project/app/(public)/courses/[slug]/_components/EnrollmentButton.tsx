@@ -5,7 +5,7 @@ import { tryCatch } from "@/hooks/try-catch";
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { enrollInCourseAction } from "../actions";
-import { CheckIcon, CircleChevronRight, Loader2 } from "lucide-react";
+import { CircleChevronRight, Loader2 } from "lucide-react";
 
 export function EnrollmentButton({courseId}:{courseId: string}) {
     const [pending, startTransition] = useTransition();

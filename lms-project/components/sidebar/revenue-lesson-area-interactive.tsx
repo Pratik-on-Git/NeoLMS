@@ -149,7 +149,6 @@ function PieCard({
                 <ChartContainer id={id} config={chartConfig} className="mx-auto aspect-square w-full max-w-[300px]">
                     <PieChart>
                         <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-                        {/* Per-slice gradients (subtle opacity fade) */}
                         <defs>
                             {pieData.map((p, i) => (
                                 <radialGradient key={`${id}-grad-${i}`} id={`grad-${id}-${i}`} cx="50%" cy="50%" r="75%">
@@ -268,21 +267,32 @@ export function RevenueLessonAreaInteractive({ data, totalRevenue }: RevenueLess
         }
     }, [data])
 
-    const source = data && data.length ? data : fetched ?? []
-
     const records = React.useMemo(() => {
+        const source = data && data.length ? data : fetched ?? []
         if (source && source.length) {
             return aggregateByMonth(source)
         }
 
         // no data available — return empty records
         return []
-    }, [source])
+    }, [data, fetched])
+
+    const revenueDescription = loading
+        ? "Loading data..."
+        : error
+            ? "Failed to load data"
+            : "Revenue for the Month"
+
+    const lessonsDescription = loading
+        ? "Loading data..."
+        : error
+            ? "Failed to load data"
+            : "Total Lessons in this Month"
 
     return (
         <div className="grid gap-6 md:grid-cols-2">
-            <PieCard id="pie-revenue" title="Monthly Revenue" description="Revenue for the Month" seriesKey="revenue" records={records} colorOffset={revenueColorOffset} overrideValue={typeof totalRevenue === 'number' ? totalRevenue : undefined} />
-            <PieCard id="pie-lessons" title="Monthly Lessons" description="Total Lessons in this Month" seriesKey="lessons" records={records} colorOffset={lessonsColorOffset} />
+            <PieCard id="pie-revenue" title="Monthly Revenue" description={revenueDescription} seriesKey="revenue" records={records} colorOffset={revenueColorOffset} overrideValue={typeof totalRevenue === 'number' ? totalRevenue : undefined} />
+            <PieCard id="pie-lessons" title="Monthly Lessons" description={lessonsDescription} seriesKey="lessons" records={records} colorOffset={lessonsColorOffset} />
         </div>
     )
 }

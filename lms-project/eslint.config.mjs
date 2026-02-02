@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "./lib/generated/**",
+    // TanStack Table's useReactTable is flagged as incompatible with React Compiler
+    "components/sidebar/data-table.tsx",
   ]),
 ]);
 

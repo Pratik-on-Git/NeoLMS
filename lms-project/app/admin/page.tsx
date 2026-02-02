@@ -14,7 +14,7 @@ import { Suspense } from "react";
 
 export default async function AdminIndexPage() {
   const enrollmentData = await adminGetEnrollmentStats();
-  const { totalCourses, totalLessons } = await adminGetDashboardStats();
+  const { totalCourses } = await adminGetDashboardStats();
   const allLessons = await adminGetAllLessons();
   const totalRevenue = totalCourses * 50;
 

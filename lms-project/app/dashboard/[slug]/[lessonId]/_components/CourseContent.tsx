@@ -62,7 +62,7 @@ export function CourseContent({ data, slug }: iAppProps) {
 
     function onSubmit() {
         startTransition(async () => {
-            const { data: result, error } = await tryCatch(markLessonComplete(data.id, data.Chapter.course.slug));
+            const { data: result, error } = await tryCatch(markLessonComplete(data.id, slug));
             if (error) {
                 toast.error("Unexpected error occurred. Please try again.");
                 return;
@@ -70,6 +70,7 @@ export function CourseContent({ data, slug }: iAppProps) {
 
             if (result.status === "success") {
                 toast.success(result.message);
+                router.refresh();
 
             } else if (result.status === "error") {
                 toast.error(result.message);

@@ -10,12 +10,11 @@ import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { CollapsibleTrigger } from "@/components/ui/collapsible";
 import { CheckIcon, Play } from "lucide-react";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { checkIfCourseBought } from "@/app/data/user/user-is-enrolled";
 import Link from "next/link";
 import { EnrollmentButton } from "./_components/EnrollmentButton";
 
-type Params = Promise<{ slug: string }>;
 export default async function SlugPage({ params }: { params: { slug: string } }) {
     const { slug } = await params;
     const course = await getIndividualCourse(slug);

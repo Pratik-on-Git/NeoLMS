@@ -1,4 +1,3 @@
-import { Course } from './../../../node_modules/.pnpm/@prisma+client@7.2.0_prisma_f75d495222e5a9a082c60aa675bb2498/node_modules/.prisma/client/index.d';
 import "server-only";
 import { requireUser } from "../user/require-user";
 import { notFound } from "next/navigation";

@@ -5,7 +5,7 @@ import Image from "next/image";
 import Logo from "@/public/favicon.png";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { authClient } from "@/lib/auth-client";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { UserDropdown } from "./UserDropdown";
 
 const navigationItems = [
