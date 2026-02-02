@@ -15,7 +15,7 @@ export default async function CourseSlugRoute({ params }: iAppProps) {
     // Find the first lesson in the first chapter
     const firstChapter = course.course.chapter[0];
     const firstLesson = firstChapter.lessons[0];
-    if (firstLesson) {
+    if ( firstLesson) {
         redirect(`/dashboard/${slug}/${firstLesson.id}`);
     }
     
@@ -23,7 +23,7 @@ export default async function CourseSlugRoute({ params }: iAppProps) {
     return (
         <div className="flex items-center justify-center h-full">
             <div className="text-center">
-                <h2 className="text-xl font-semibold text-muted-foreground">No lessons available</h2>
+                <h2 className="text-2xl font-semibold text-muted-foreground">No lessons available</h2>
                 <p className="text-sm text-muted-foreground mt-2">This course doesn&apos;t have any lessons yet.</p>
             </div>
         </div>
