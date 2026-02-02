@@ -44,6 +44,9 @@ importers:
       '@prisma/client':
         specifier: ^7.2.0
         version: 7.2.0(prisma@7.2.0(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.3))(typescript@5.9.3)
+      '@prisma/nextjs-monorepo-workaround-plugin':
+        specifier: ^7.3.0
+        version: 7.3.0
       '@radix-ui/react-alert-dialog':
         specifier: ^1.1.15
         version: 1.1.15(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -1147,6 +1150,9 @@ packages:
 
   '@prisma/get-platform@7.2.0':
     resolution: {integrity: sha512-k1V0l0Td1732EHpAfi2eySTezyllok9dXb6UQanajkJQzPUGi3vO2z7jdkz67SypFTdmbnyGYxvEvYZdZsMAVA==}
+
+  '@prisma/nextjs-monorepo-workaround-plugin@7.3.0':
+    resolution: {integrity: sha512-6Qvce1fa78asGdzoseexupJswW45ZFYIcQ3NZ/PZn9TfBSHOsloT6udnZtIaqI6aa3HccxsTKXKK6I/ASM7hkw==}
 
   '@prisma/query-plan-executor@6.18.0':
     resolution: {integrity: sha512-jZ8cfzFgL0jReE1R10gT8JLHtQxjWYLiQ//wHmVYZ2rVkFHoh0DT8IXsxcKcFlfKN7ak7k6j0XMNn2xVNyr5cA==}
@@ -5996,6 +6002,8 @@ snapshots:
   '@prisma/get-platform@7.2.0':
     dependencies:
       '@prisma/debug': 7.2.0
+
+  '@prisma/nextjs-monorepo-workaround-plugin@7.3.0': {}
 
   '@prisma/query-plan-executor@6.18.0': {}
 
