@@ -7,6 +7,7 @@ import { emailOTP } from "better-auth/plugins";
 import { admin } from "better-auth/plugins"
 
 export const auth = betterAuth({
+  baseURL: env.BETTER_AUTH_URL,
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
