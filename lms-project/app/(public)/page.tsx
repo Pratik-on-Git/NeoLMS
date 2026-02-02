@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { Card, CardContentNoPadding, CardHeader, CardTitle } from "@/components/ui/card";
+import { ShaderAnimation } from "@/components/ui/shader-animation";
 
 interface featureProps {
     title: string;
@@ -47,12 +48,21 @@ export default function Home() {
 
     return (
         <>
-                <section className="relative py-20">
-                    <MotionMain className="">
+            <section className="relative py-20 overflow-hidden min-h-screen flex items-center">
+                <ShaderAnimation />
+                {/* Vignette fade overlay at the bottom */}
+                <div 
+                    className="absolute inset-x-0 bottom-0 h-72 z-[5] pointer-events-none bg-gradient-to-b from-transparent via-background/70 to-background"
+                />
+                <MotionMain className="relative z-10 w-full">
                     <div className="flex flex-col items-center text-center space-y-8">
-                        <Badge variant="outline">The Future Of Online Education</Badge>
-                        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">Elevate Your Learning Experience</h1>
-                        <p className="max-w-[700px] text-muted-foreground md:text-xl">
+                        <Badge variant="outline" className="bg-black/20 backdrop-blur-sm border-white/20">
+                            The Future Of Online Education
+                        </Badge>
+                        <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-white">
+                            Elevate Your Learning Experience
+                        </h1>
+                        <p className="max-w-[700px] text-white/80 md:text-xl">
                             Discover A New Way To Learn With Our Modern, Interactive Learning
                             Management System. Access High-Quality Courses Anytime, Anywhere.
                         </p>
@@ -90,10 +100,11 @@ export default function Home() {
                             )}
                         </div>
                     </div>
-                    </MotionMain>
-                </section>
+                </MotionMain>
+            </section>
 
-                <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <section className="container mx-auto px-4 md:px-6 lg:px-8 py-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {features.map((feature, index) => (
                         <Card key={index} className="hover:shadow-lg transition-shadow"> 
                             <CardHeader>
@@ -105,7 +116,8 @@ export default function Home() {
                             </CardHeader>
                         </Card>
                     ))}
-                </section>
+                </div>
+            </section>
         </>
     )
 }
