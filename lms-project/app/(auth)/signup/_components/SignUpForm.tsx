@@ -150,7 +150,7 @@ export function SignUpForm() {
                         </p>
                     </div>
 
-                    <Button variant="blue" type="submit" className="w-full" disabled={isPending}>
+                    <Button type="submit" className="w-full" disabled={isPending}>
                         {isPending ? (
                             <>
                                 <Loader2 className="size-4 animate-spin" />

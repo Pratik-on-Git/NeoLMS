@@ -5,10 +5,10 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp
 import { authClient } from "@/lib/auth-client";
 import { Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useState, useTransition, Suspense } from "react";
 import { toast } from "sonner";
 
-export default function VerifyRequest() {
+function VerifyRequestContent() {
     const router = useRouter();
     const [otp, setOtp] = useState("");
     const [emailPending, startTransition] = useTransition();
@@ -70,5 +70,13 @@ export default function VerifyRequest() {
                 </Button>
             </CardContent>
         </Card>
+    )
+}
+
+export default function VerifyRequest() {
+    return (
+        <Suspense fallback={<div className="w-full mx-auto max-w-sm">Loading...</div>}>
+            <VerifyRequestContent />
+        </Suspense>
     )
 }

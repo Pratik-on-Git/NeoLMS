@@ -73,7 +73,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
   // Verify enrollment exists
   const enrollment = await prisma.enrollment.findUnique({
     where: { id: enrollmentId },
-    select: { id: true, status: true, userId: true, courseId: true },
+    select: { id: true, status: true, userId: true, courseId: true, ammount: true },
   });
 
   if (!enrollment) {
