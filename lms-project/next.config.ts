@@ -21,6 +21,7 @@ const nextConfig: NextConfig = {
     return config;
   },
   reactCompiler: true,
+  turbopack: {},
 };
 
 export default nextConfig;
