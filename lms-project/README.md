@@ -114,3 +114,57 @@ Admin URLs: /admin, /admin/dashboard, /admin/courses
 pnpm build
 pnpm start
 ```
+
+## Deploy to Vercel
+
+### 1. Set Environment Variables in Vercel
+
+In your Vercel project settings, add all required environment variables:
+
+**CRITICAL**: Set `BETTER_AUTH_URL` to your production URL (e.g., `https://your-app.vercel.app`)
+
+All required variables:
+- `DATABASE_URL` - Your production PostgreSQL connection string
+- `BETTER_AUTH_SECRET` - Generate a new secure secret for production
+- `BETTER_AUTH_URL` - `https://your-app.vercel.app` (your actual Vercel domain)
+- `AUTH_GITHUB_CLIENT_ID` - GitHub OAuth App client ID
+- `AUTH_GITHUB_SECRET` - GitHub OAuth App secret
+- `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_USER`, `EMAIL_PASSWORD`, `EMAIL_FROM` - SMTP config
+- `RESEND_API_KEY` - Resend API key (required by env validation)
+- `ARCJET_KEY` - Your Arcjet production key
+- `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_ENDPOINT_URL_S3`, `AWS_ENDPOINT_URL_IAM`, `AWS_REGION` - S3 config
+- `NEXT_PUBLIC_S3_BUCKET_NAME_IMAGES` - S3 bucket name
+- `STRIPE_SECRET_KEY` - Production Stripe secret key
+- `STRIPE_WEBHOOK_SECRET` - Stripe webhook signing secret (from Vercel webhook setup)
+
+### 2. Update GitHub OAuth App
+
+In your GitHub OAuth App settings, add the production callback URL:
+```
+https://your-app.vercel.app/api/auth/callback/github
+```
+
+### 3. Configure Stripe Webhooks
+
+Add a webhook endpoint in Stripe Dashboard pointing to:
+```
+https://your-app.vercel.app/api/webhooks/stripe
+```
+
+Listen for events: `checkout.session.completed`, `checkout.session.expired`
+
+Copy the webhook signing secret to `STRIPE_WEBHOOK_SECRET` in Vercel.
+
+### 4. Deploy
+
+Push to your Git repository and Vercel will automatically deploy.
+
+### Common Production Issues
+
+**ERR_CONNECTION_REFUSED on /api/auth/***
+- ✅ Fixed: `BETTER_AUTH_URL` must be your production URL, not localhost
+- ✅ Check: All environment variables are set in Vercel
+- ✅ Check: GitHub OAuth callback URL includes your production domain
+
+**Build fails with "frozen-lockfile" error**
+- Run `pnpm install` locally and commit `pnpm-lock.yaml`
